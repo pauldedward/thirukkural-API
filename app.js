@@ -82,9 +82,39 @@ const detailSchema = new Schema({
 const Item = mongoose.model("Item", itemSchema);
 const Detail = mongoose.model("Detail", detailSchema);
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
   res.send("hello guts")
 })
+
+app.get("/select/:kuralArrayNo", async function (req, res) {
+
+  let kuralArray = [];
+  let arrayOfKuralNo = req.params.kuralArrayNo;
+  arrayOfKuralNo = arrayOfKuralNo.split(",");
+  arrayOfKuralNo = arrayOfKuralNo.map(num => _.toNumber(num));
+  arrayOfKuralNo = arrayOfKuralNo.filter(num => (num > 0 && num <= 1330 ));
+  arrayOfKuralNo = [...new Set(arrayOfKuralNo)]
+
+  kuralArray = arrayOfKuralNo.map(async kuralNumber => {
+    return await Item.findOne({ Number : kuralNumber }, function (err, item) {
+      if(err) {
+        console.log(err)
+      } else {
+        return item;
+      }
+    })
+  });
+
+  kuralArray = await Promise.all(kuralArray)
+  
+  if(kuralArray[0]) {
+    res.send(kuralArray)
+  } else {
+    res.send("No thirukural found");
+  }  
+
+});
+
 
 app.get("/from/:kuralNeeded", async function (req, res) {
   
