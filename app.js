@@ -1,14 +1,13 @@
+
 import dotenv from "dotenv"
 dotenv.config()
 import express from "express"
 import mongoose from "mongoose"
 import _ from "lodash"
 
-
 const { Schema } = mongoose;
 
 const app = express()
-
 
 const dbConnect = (async () => {
   try {
@@ -86,17 +85,17 @@ app.get("/", async (req, res) => {
   res.send("hello guts")
 })
 
-app.get("/select/:kuralArrayNo", async function (req, res) {
+app.get("/select/:kuralNoArray", async (req, res) => {
 
   let kuralArray = [];
-  let arrayOfKuralNo = req.params.kuralArrayNo;
+  let arrayOfKuralNo = req.params.kuralNoArray;
   arrayOfKuralNo = arrayOfKuralNo.split(",");
   arrayOfKuralNo = arrayOfKuralNo.map(num => _.toNumber(num));
   arrayOfKuralNo = arrayOfKuralNo.filter(num => (num > 0 && num <= 1330 ));
   arrayOfKuralNo = [...new Set(arrayOfKuralNo)]
 
   kuralArray = arrayOfKuralNo.map(async kuralNumber => {
-    return await Item.findOne({ Number : kuralNumber }, function (err, item) {
+    return await Item.findOne({ Number : kuralNumber }, (err, item) => {
       if(err) {
         console.log(err)
       } else {
@@ -110,58 +109,77 @@ app.get("/select/:kuralArrayNo", async function (req, res) {
   if(kuralArray[0]) {
     res.send(kuralArray)
   } else {
-    res.send("No thirukural found");
+    res.send("No thirukural found.\nCheck available kural list at https://github.com/tk120404/thirukkural");
   }  
 
 });
 
 
-app.get("/from/:kuralNeeded", async function (req, res) {
+app.get("/topic/:kuralNeeded", async (req, res) => {
   
-  const kural = req.params.kuralNeeded;
-  let kuralName =  _.camelCase(kural);
-  kuralName = _.startCase(kural);
+  const topic = req.params.kuralNeeded;
+  let topicName =  _.camelCase(topic);
+  topicName = _.startCase(topic);
 
-  kuralName = await Detail.findOne({ transliteration : kuralName } , function(err, detail) {
+  await Detail.findOne({ transliteration : topicName } , (err, detail) => {
     if(err) {
         console.log(err) ;   
     } else if (!detail){
-        res.send("No such thirukkural topic");
+        res.send("No such thirukkural topic.\nCheck spelling with original DB at https://github.com/tk120404/thirukkural");
     } else {
-        return detail;
+      const start = detail.start;
+      const end = detail.end;
+    
+      res.redirect("/from/"+ start +"/to/"+ end);
     }
   });
-
-  const start = kuralName.start;
-  const end = kuralName.end;
-
-  const kuralArray = await Item.find({ $and : [ {Number : { $gte : start }}, {Number : { $lte : end }} ] } , function (err, items) {
-              if(err) {
-                console.log(err)
-              } else if(!items) {
-                console.log("no items")
-              } else {
-                return items
-              }
-        })
-  kuralArray.sort((a, b) => a.Number - b.Number );
-
-  res.send(kuralArray);
+ 
 
 });
 
-app.get("/:kuralNeeded", async function (req, res) {
+app.get("/from/:from/to/:to", async (req, res) => {
+  
+    const start = _.toNumber(req.params.from);
+    const end = _.toNumber(req.params.to);
+    if(start && end)
+    {
+        if(end - start >= 0) {
+          const kuralArray = await Item.find({ $and : [ {Number : { $gte : start }}, {Number : { $lte : end }} ] } , (err, items) => {
+            if(err) {
+              console.log(err)
+            } else if(!items) {
+              console.log("No such thirukkural.\nCheck available kural list at https://github.com/tk120404/thirukkural")
+            } else {
+              return items
+            }
+          })
+
+          kuralArray.sort((a, b) => a.Number - b.Number );
+          res.send(kuralArray);
+
+        } else {
+          res.send("Start is larger than End");
+        }
+        
+
+    } else {
+      res.send("Not valid start or end value.");
+    }
+
+});
+
+app.get("/:kuralNeeded", async (req, res) => {
 
     const kural = req.params.kuralNeeded;
     const kuralNumber = parseInt(kural);
     
     if(kuralNumber) {
 
-        await Item.findOne({ Number : kuralNumber } , function(err, item) {
+        await Item.findOne({ Number : kuralNumber } , (err, item) => {
           if(err) {
               console.log(err) ;   
           } else if (!item){
-              res.send("No such thirukkural");
+              res.send("No such thirukkural.\nCheck available kural list at https://github.com/tk120404/thirukkural");
           } else {
               res.send(item);
           }
@@ -174,11 +192,11 @@ app.get("/:kuralNeeded", async function (req, res) {
           let kuralId = Math.floor(Math.random() * 1330 + 1);
           res.redirect("/" + kuralId);
         } else {
-          await Detail.findOne({ transliteration : kuralName } , function(err, detail) {
+          await Detail.findOne({ transliteration : kuralName } , (err, detail) => {
             if(err) {
                 console.log(err) ;   
             } else if (!detail){
-                res.send("No such thirukkural topic");
+                res.send("No such thirukkural topic.\nCheck spelling with original DB at https://github.com/tk120404/thirukkural");
             } else {
                 const start = detail.start;
                 const end = detail.end;
@@ -192,9 +210,9 @@ app.get("/:kuralNeeded", async function (req, res) {
    
 });
 
-
-
-
+app.get("*",(req, res) => {
+  res.send("No such Route (404).\nRead Documentation at")
+});
 
 
 app.listen(process.env.PORT || 3000, () => {
