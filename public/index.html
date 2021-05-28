@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ped's Thirukkural API</title>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=KoHo:wght@200;300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <script src="https://kit.fontawesome.com/0618c6ba29.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+<body>
+   <header>
+       <nav class="navbar shadow">
+           <p class="logo">Ped's Thirukkural</p> 
+           <ul class="nav-links">
+               <li class="nav-link"><a class="scroll" href="#home">Home</a></li>
+               <li class="nav-link"><a class="scroll" href="#docs">Documentation</a></li>
+               <li class="nav-link"><a class="scroll" href="#try">Try it out</a></li>
+           </ul>
+           <div class="burger">
+              <span class="burger-line1 bg-line"></span>
+              <span class="burger-line2 bg-line"></span>
+              <span class="burger-line3 bg-line"></span>
+           </div>
+       </nav>
+   </header>
+   
+   <main id="home">
+           <h3 class="title">Get Started</h3>
+           <picture class="title-image"><img src="images/valluvar.png" alt="valluvar"></picture>
+           <p>Welcome to Ped's thirukkural API. An API developed for web developers to get thirukkural as response using various methods.</p>
+          <p>Special credits for DB : <a href="https://github.com/tk120404/thirukkural" target="_blank">tk120404</a></p> 
+    </main>
+
+    <div class="documentation" id="docs">
+        <h3 class="documentation-title">Documentation</h3>
+        <div class="note doc-method-group">
+            <h4>Note :</h4>
+            <ul>
+                <li>Replace {base url} with []</li>
+                <li>Replace any value inside {} with custom values.</li>
+                <li>API only has GET methods, meaning you cannot post or put vise versa.</li>
+                <li>Check spelling of Topics of thirukkural at <a href="https://github.com/tk120404/thirukkural" target="_blank">tk120404</a></li>
+                <li>Topic names refer to <strong>transliterations</strong> of the thirukkural objects in the above mentioned Database. Check the above mentioned DB to know all the topic names.</li>
+                <li>To know more about thirukkural, visit <a href="https://en.wikipedia.org/wiki/Tirukku%E1%B9%9Fa%E1%B8%B7" target="_blank" rel="noopener noreferrer">Thirukkural wikipedia</a></li>
+            </ul>
+        </div>
+        <div class="documentation-methods">
+            <div class="doc-method-group">
+                <h4 class="method-name">Single kural</h4>
+                <p class="method-description">To get any single kural, just add kural number as a string in query parameter after the base url. Response will be a json object with various fields</p>
+                <p class="syntax"><strong>syntax :</strong> {base url}/{kural number}</p>
+                <p class="example"><strong>sample :</strong> []/1</p>
+            </div>
+            <div class="doc-method-group">
+                <h4 class="method-name">Random kural</h4>
+                <p class="method-description">To get a random kural, just add the word random in query parameter after the base url. Response will be a json object with various fields</p>
+                <p class="syntax"><strong>syntax :</strong> {base url}/random</p>
+                <p class="example"><strong>sample :</strong> []/random</p>
+            </div>
+            <div class="doc-method-group">
+                <h4 class="method-name">Random kural from a topic</h4>
+                <p class="method-description">To get a random kural from a particular topic(Athikaaram, Iyal, Paal), just add the name of the topic in query params after the base url. Response will be a json object with various fields</p>
+                <p class="syntax"><strong>syntax :</strong> {base url}/{Topic name}</p>
+                <p class="sample"><strong>sample :</strong> []/Araththuppaal</p>
+            </div>
+            <div class="doc-method-group">
+                <h4 class="method-name">All from a topic</h4>
+                <p class="method-description">To get all thirukkural from a particular topic, just add "/topic/" and topic name in query params after the base url. Response will be an array of json objects with various fields</p>
+                <p class="example"><strong>syntax :</strong> {base url}/topic/{topic name}</p>
+                <p class="example"><strong>sample :</strong> []/topic/Araththuppaal</p>
+            </div>
+            <div class="doc-method-group">
+                <h4 class="method-name">From To</h4>
+                <p class="method-description">To get an array of continuous kural, just add "/from/" and the starting number of kural, then "/to/" and the ending number of kural in query params after the base url. Response will be an array of json objects with various fields</p>
+                <p class="example"><strong>syntax :</strong> {base url}/from/{starting number}/to/{ending number}</p>
+                <p class="example"><strong>sample :</strong> []/from/20/to/25</p>
+            </div>
+            <div class="doc-method-group">
+                <h4 class="method-name">Selective kural</h4>
+                <p class="method-description">To get any number of desired kural, just add "/select/" and then add the  kural numbers you need as an javascript array or as a comma separated string ("2,3,4") in query params after the base url. Response will be an array of json objects with various fields</p>
+                <p class="example"><strong>syntax :</strong> {base url}/select/{kuralNumberArray} or {base url}/select/{kuralNumberString}</p>
+                <p class="example"><strong>sample :</strong> []/select/[1,40,1330] or []/select/"1,40,1330"</p>
+            </div>
+        </div>
+    </div>
+    <div id="try" class="try-it-out">
+        <h3 class="try-it-out-title">Try It Out (Single/Random kural only)</h3>
+        <div class="input-group">
+            <input type="text" name="url" id="url-text" placeholder="[]/{kural number}">
+            <button class="submit-button">get kural</button>
+        </div>
+        <div class="result">
+            <p class="first-line">your thirukural will be </p>
+            <p class="second-line">dis played here.</p>
+        </div> 
+        <p class="try-it-out-note"><strong>Note : </strong>Try other methods in a blank new browser tab.</p>   
+    </div>
+    <footer>
+        <div class="social">
+                <h3 id="social-text">Follow</h3>
+                <div id="icon-section">
+                    <a href="https://github.com/pauldedward" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/in/paul-d-edward-a6769b203/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://twitter.com/PaulDEdward2" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/paul_d_edward/" target="_blank"><i class="fab fa-instagram"></i></a>
+                </div>
+        </div>
+        <p>copyrights@Ded Dev 2021</p>
+    </footer>
+
+    <script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>
