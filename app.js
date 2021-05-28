@@ -241,7 +241,7 @@ app.get("/:kuralNeeded", async (req, res) => {
 });
 
 app.get("*",(req, res) => {
-  res.send("No such Route (404).\nRead Documentation at []")
+  res.send("No such Route (404).\nRead Documentation at https://ped-kural.herokuapp.com")
 });
 
 

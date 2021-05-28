@@ -44,7 +44,7 @@
         <div class="note doc-method-group">
             <h4>Note :</h4>
             <ul>
-                <li>Replace {base url} with []</li>
+                <li>Replace {base url} with https://ped-kural.herokuapp.com</li>
                 <li>Replace any value inside {} with custom values.</li>
                 <li>API only has GET methods, meaning you cannot post or put vise versa.</li>
                 <li>Check spelling of Topics of thirukkural at <a href="https://github.com/tk120404/thirukkural" target="_blank">tk120404</a></li>
@@ -57,44 +57,44 @@
                 <h4 class="method-name">Single kural</h4>
                 <p class="method-description">To get any single kural, just add kural number as a string in query parameter after the base url. Response will be a json object with various fields</p>
                 <p class="syntax"><strong>syntax :</strong> {base url}/{kural number}</p>
-                <p class="example"><strong>sample :</strong> []/1</p>
+                <p class="example"><strong>sample :</strong> https://ped-kural.herokuapp.com/1</p>
             </div>
             <div class="doc-method-group">
                 <h4 class="method-name">Random kural</h4>
                 <p class="method-description">To get a random kural, just add the word random in query parameter after the base url. Response will be a json object with various fields</p>
                 <p class="syntax"><strong>syntax :</strong> {base url}/random</p>
-                <p class="example"><strong>sample :</strong> []/random</p>
+                <p class="example"><strong>sample :</strong> https://ped-kural.herokuapp.com/random</p>
             </div>
             <div class="doc-method-group">
                 <h4 class="method-name">Random kural from a topic</h4>
                 <p class="method-description">To get a random kural from a particular topic(Athikaaram, Iyal, Paal), just add the name of the topic in query params after the base url. Response will be a json object with various fields</p>
                 <p class="syntax"><strong>syntax :</strong> {base url}/{Topic name}</p>
-                <p class="sample"><strong>sample :</strong> []/Araththuppaal</p>
+                <p class="sample"><strong>sample :</strong> https://ped-kural.herokuapp.com/Araththuppaal</p>
             </div>
             <div class="doc-method-group">
                 <h4 class="method-name">All from a topic</h4>
                 <p class="method-description">To get all thirukkural from a particular topic, just add "/topic/" and topic name in query params after the base url. Response will be an array of json objects with various fields</p>
                 <p class="example"><strong>syntax :</strong> {base url}/topic/{topic name}</p>
-                <p class="example"><strong>sample :</strong> []/topic/Araththuppaal</p>
+                <p class="example"><strong>sample :</strong> https://ped-kural.herokuapp.com/topic/Araththuppaal</p>
             </div>
             <div class="doc-method-group">
                 <h4 class="method-name">From To</h4>
                 <p class="method-description">To get an array of continuous kural, just add "/from/" and the starting number of kural, then "/to/" and the ending number of kural in query params after the base url. Response will be an array of json objects with various fields</p>
                 <p class="example"><strong>syntax :</strong> {base url}/from/{starting number}/to/{ending number}</p>
-                <p class="example"><strong>sample :</strong> []/from/20/to/25</p>
+                <p class="example"><strong>sample :</strong> https://ped-kural.herokuapp.com/from/20/to/25</p>
             </div>
             <div class="doc-method-group">
                 <h4 class="method-name">Selective kural</h4>
                 <p class="method-description">To get any number of desired kural, just add "/select/" and then add the  kural numbers you need as an javascript array or as a comma separated string ("2,3,4") in query params after the base url. Response will be an array of json objects with various fields</p>
                 <p class="example"><strong>syntax :</strong> {base url}/select/{kuralNumberArray} or {base url}/select/{kuralNumberString}</p>
-                <p class="example"><strong>sample :</strong> []/select/[1,40,1330] or []/select/"1,40,1330"</p>
+                <p class="example"><strong>sample :</strong> https://ped-kural.herokuapp.com/select/1,40,1330 or "https://ped-kural.herokuapp.com/select/" + kuralNumberArray where kuralNumberArray is an Array.</p>
             </div>
         </div>
     </div>
     <div id="try" class="try-it-out">
         <h3 class="try-it-out-title">Try It Out (Single/Random kural only)</h3>
         <div class="input-group">
-            <input type="text" name="url" id="url-text" placeholder="[]/{kural number}">
+            <input type="text" name="url" id="url-text" placeholder="https://ped-kural.herokuapp.com/{kural number}">
             <button class="submit-button">get kural</button>
         </div>
         <div class="result">
